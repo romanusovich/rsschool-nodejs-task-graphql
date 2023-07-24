@@ -28,3 +28,22 @@ export const profileType = new graphql.GraphQLObjectType({
         },
     }),
 });
+
+export const CreateProfileInput = new graphql.GraphQLInputObjectType({
+    name: "CreateProfileInput",
+    fields: () => ({
+        isMale: { type: graphql.GraphQLBoolean },
+        yearOfBirth: { type: graphql.GraphQLInt },
+        userId: { type: graphql.GraphQLString },
+        memberTypeId: { type: graphql.GraphQLString },
+    }),
+});
+
+export const ChangeProfileInput = new graphql.GraphQLInputObjectType({
+    name: "ChangeProfileInput",
+    fields: () => ({
+        isMale: { type: graphql.GraphQLBoolean },
+        yearOfBirth: { type: graphql.GraphQLInt },
+        memberTypeId: { type: graphql.GraphQLString },
+    }),
+});

@@ -20,3 +20,21 @@ export const postType = new graphql.GraphQLObjectType({
         },
     }),
 });
+
+export const CreatePostInput = new graphql.GraphQLInputObjectType({
+    name: "CreatePostInput",
+    fields: () => ({
+        title: { type: graphql.GraphQLString },
+        content: { type: graphql.GraphQLString },
+        authorId: { type: graphql.GraphQLString },
+    }),
+});
+
+export const ChangePostInput = new graphql.GraphQLInputObjectType({
+    name: "ChangePostInput",
+    fields: () => ({
+        title: { type: graphql.GraphQLString },
+        content: { type: graphql.GraphQLString },
+        authorId: { type: graphql.GraphQLString },
+    }),
+});
