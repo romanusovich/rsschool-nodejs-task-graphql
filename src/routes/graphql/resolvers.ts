@@ -17,19 +17,19 @@ export const rootValue = {
         return await prisma.user.findMany();
     },
 
-    createUser: async (user: createUser) => {
+    createUser: async (args: { dto: createUser }) => {
         const newUser = await prisma.user.create({
-            data: user,
+            data: args.dto,
         });
         return newUser;
     },
 
-    updateUser: async (args: { id: UUID, user: updateUser }) => {
+    changeUser: async (args: { id: UUID, dto: updateUser }) => {
         const updUser = await prisma.user.update({
             where: {
                 id: args.id,
             },
-            data: args.user,
+            data: args.dto,
         });
         return updUser;
     },
@@ -54,6 +54,32 @@ export const rootValue = {
 
     posts: async () => {
         return await prisma.post.findMany();
+    },
+
+    createPost: async (args: { dto: createPost }) => {
+        const newPost = await prisma.post.create({
+            data: args.dto,
+        });
+        return newPost;
+    },
+
+    changePost: async (args: { id: UUID, dto: updatePost }) => {
+        const updPost = await prisma.post.update({
+            where: {
+                id: args.id,
+            },
+            data: args.dto,
+        });
+        return updPost;
+    },
+
+    deletePost: async (args: { id: UUID }) => {
+        await prisma.post.delete({
+            where: {
+                id: args.id
+            },
+        });
+        return args.id;
     },
 
     // MEMBER
@@ -81,6 +107,61 @@ export const rootValue = {
     profiles: async () => {
         return await prisma.profile.findMany();
     },
+
+    createProfile: async (args: { dto: createProfile }) => {
+        const newProfile = await prisma.profile.create({
+            data: args.dto,
+        });
+        return newProfile;
+    },
+
+    changeProfile: async (args: { id: UUID, dto: updateProfile }) => {
+        const updProfile = await prisma.profile.update({
+            where: {
+                id: args.id,
+            },
+            data: args.dto,
+        });
+        return updProfile;
+    },
+
+    deleteProfile: async (args: { id: UUID }) => {
+        await prisma.profile.delete({
+            where: {
+                id: args.id
+            },
+        });
+        return args.id;
+    },
+
+    // SUBSCRIBES
+    subscribeTo: async (args: { userId: UUID, authorId: UUID }) => {
+        await prisma.user.update({
+            where: {
+                id: args.userId,
+            },
+            data: {
+                userSubscribedTo: {
+                    create: {
+                        authorId: args.authorId,
+                    },
+                },
+            },
+        });
+        return args.userId;
+    },
+
+    unsubscribeFrom: async (args: { userId: UUID, authorId: UUID }) => {
+        await prisma.subscribersOnAuthors.delete({
+            where: {
+                subscriberId_authorId: {
+                    subscriberId: args.userId,
+                    authorId: args.authorId,
+                },
+            },
+        });
+        return args.userId;
+    },
 };
 
 type createUser = {
@@ -91,4 +172,30 @@ type createUser = {
 type updateUser = {
     name?: string,
     balance?: number
+};
+
+type createPost = {
+    title: string,
+    content: string,
+    authorId: string,
+};
+
+type updatePost = {
+    title?: string,
+    content?: string,
+    authorId: string,
+};
+
+type createProfile = {
+    isMale: boolean,
+    yearOfBirth: number,
+    userId: string,
+    memberTypeId: string,
+};
+
+type updateProfile = {
+    isMale?: boolean,
+    yearOfBirth?: number,
+    userId: string,
+    memberTypeId?: string,
 };
