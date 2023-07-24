@@ -2,6 +2,9 @@ import { Type } from '@fastify/type-provider-typebox';
 import * as graphql from 'graphql';
 import { UUIDType } from './types/uuid.js';
 import { createUserType, userType } from './types/user.js';
+import { postType } from './types/post.js';
+import { profileType } from './types/profile.js';
+import { MemberId, memberType } from './types/member.js';
 
 export const gqlResponseSchema = Type.Partial(
   Type.Object({
@@ -25,6 +28,7 @@ export const createGqlResponseSchema = {
 const queryType = new graphql.GraphQLObjectType({
   name: "Query",
   fields: {
+    // USER
     user: {
       type: userType,
       args: {
@@ -33,6 +37,36 @@ const queryType = new graphql.GraphQLObjectType({
     },
     users: {
       type: new graphql.GraphQLList(userType),
+    },
+    // MEMBER
+    memberType: {
+      type: memberType,
+      args: {
+        id: { type: MemberId },
+      },
+    },
+    memberTypes: {
+      type: new graphql.GraphQLList(memberType),
+    },
+    // POST
+    post: {
+      type: postType,
+      args: {
+        id: { type: UUIDType },
+      },
+    },
+    posts: {
+      type: new graphql.GraphQLList(postType),
+    },
+    // PROFILE
+    profile: {
+      type: profileType,
+      args: {
+        id: { type: UUIDType },
+      },
+    },
+    profiles: {
+      type: new graphql.GraphQLList(profileType),
     },
   },
 });

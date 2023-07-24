@@ -1,12 +1,14 @@
 import { PrismaClient } from '@prisma/client';
+import { UUID } from 'crypto';
 
 const prisma = new PrismaClient();
 
 export const rootValue = {
-    user: async (id: string) => {
-        return await prisma.user.findFirst({
+    // USER
+    user: async (args: { id: UUID }) => {
+        return await prisma.user.findUnique({
             where: {
-                id,
+                id: args.id,
             }
         });
     },
@@ -22,23 +24,62 @@ export const rootValue = {
         return newUser;
     },
 
-    updateUser: async (id: string, user: updateUser) => {
+    updateUser: async (args: { id: UUID, user: updateUser }) => {
         const updUser = await prisma.user.update({
             where: {
-                id,
+                id: args.id,
             },
-            data: user,
+            data: args.user,
         });
         return updUser;
     },
 
-    deleteUser: async (id: string) => {
+    deleteUser: async (args: { id: UUID }) => {
         await prisma.user.delete({
             where: {
-                id
+                id: args.id
             },
         });
-        return id;
+        return args.id;
+    },
+
+    // POST
+    post: async (args: { id: UUID }) => {
+        return await prisma.post.findUnique({
+            where: {
+                id: args.id,
+            }
+        });
+    },
+
+    posts: async () => {
+        return await prisma.post.findMany();
+    },
+
+    // MEMBER
+    memberType: async (args: { id: string }) => {
+        return await prisma.memberType.findUnique({
+            where: {
+                id: args.id,
+            }
+        });
+    },
+
+    memberTypes: async () => {
+        return await prisma.memberType.findMany();
+    },
+
+    // PROFILE
+    profile: async (args: { id: UUID }) => {
+        return await prisma.profile.findUnique({
+            where: {
+                id: args.id,
+            }
+        });
+    },
+
+    profiles: async () => {
+        return await prisma.profile.findMany();
     },
 };
 
